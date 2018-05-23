@@ -20,21 +20,20 @@ public class OrderReceipt {
 
         buildCustomerInfoOfReceipt(output);
         buildOrderItemListInfoOfReceipt(output);
-
-        double totalSalesTax;
-        double totalPrice = 0d;
-
-        totalSalesTax = calculateTotalSalesTax(0d);
-        totalPrice = calculateTotalPrice(totalSalesTax, totalPrice);
-
-        output.append("Sales Tax").append('\t').append(totalSalesTax);
-        output.append("Total Amount").append('\t').append(totalPrice);
-
-
+        buildTotalPriceAndTaxOfReceipt(output);
         return output.toString();
     }
 
-    private double calculateTotalPrice(double totalSalesTax, double totalPrice) {
+    private void buildTotalPriceAndTaxOfReceipt(StringBuilder output) {
+        double totalSalesTax = calculateTotalSalesTax();
+        double totalPrice = calculateTotalPrice(totalSalesTax);
+
+        output.append("Sales Tax").append('\t').append(totalSalesTax);
+        output.append("Total Amount").append('\t').append(totalPrice);
+    }
+
+    private double calculateTotalPrice(double totalSalesTax) {
+        double totalPrice = 0d;
         for (OrderItem orderItem : order.getOrderItemList()) {
             totalPrice += orderItem.totalAmount();
         }
@@ -42,7 +41,8 @@ public class OrderReceipt {
         return totalPrice;
     }
 
-    private double calculateTotalSalesTax(double totalSalesTax) {
+    private double calculateTotalSalesTax() {
+        double totalSalesTax = 0d;
         for (OrderItem orderItem : order.getOrderItemList()) {
             double salesTax = orderItem.totalAmount() * .10;
             totalSalesTax += salesTax;
