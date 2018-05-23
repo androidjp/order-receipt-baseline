@@ -15,13 +15,9 @@ public class OrderReceipt {
 
     public String generateReceipt() {
         StringBuilder output = new StringBuilder();
-        buildHeaderOfReceipt(output);
-        order.buildReceipt(output, this);
-        return output.toString();
-    }
-
-    private void buildHeaderOfReceipt(StringBuilder output) {
         output.append("======Printing Orders======\n");
+        output.append(order.buildReceipt());
+        return output.toString();
     }
 
 }

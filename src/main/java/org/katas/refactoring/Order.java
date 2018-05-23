@@ -25,25 +25,28 @@ public class Order {
         return orderItemList;
     }
 
-    void buildReceipt(StringBuilder output, OrderReceipt orderReceipt) {
-        output.append(getCustomerName());
-        output.append(getCustomerAddress());
+    public String buildReceipt() {
+        StringBuilder receiptContent = new StringBuilder();
+        receiptContent.append(getCustomerName());
+        receiptContent.append(getCustomerAddress());
 
         for (OrderItem orderItem : getOrderItemList()) {
-            output.append(orderItem.getDescription());
-            output.append('\t');
-            output.append(orderItem.getPrice());
-            output.append('\t');
-            output.append(orderItem.getQuantity());
-            output.append('\t');
-            output.append(orderItem.totalAmount());
-            output.append('\n');
+            receiptContent.append(orderItem.getDescription());
+            receiptContent.append('\t');
+            receiptContent.append(orderItem.getPrice());
+            receiptContent.append('\t');
+            receiptContent.append(orderItem.getQuantity());
+            receiptContent.append('\t');
+            receiptContent.append(orderItem.totalAmount());
+            receiptContent.append('\n');
         }
         double totalSalesTax = calculateTotalSalesTax();
         double totalPrice = calculateTotalPrice(totalSalesTax);
 
-        output.append("Sales Tax").append('\t').append(totalSalesTax);
-        output.append("Total Amount").append('\t').append(totalPrice);
+        receiptContent.append("Sales Tax").append('\t').append(totalSalesTax);
+        receiptContent.append("Total Amount").append('\t').append(totalPrice);
+
+        return receiptContent.toString();
     }
 
     private double calculateTotalSalesTax() {
