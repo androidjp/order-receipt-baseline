@@ -16,12 +16,15 @@ public class OrderReceipt {
     public String printReceipt() {
         StringBuilder output = new StringBuilder();
 
-        output.append("======Printing Orders======\n");
-
+        buildHeaderOfReceipt(output);
         buildCustomerInfoOfReceipt(output);
         buildOrderItemListInfoOfReceipt(output);
         buildTotalPriceAndTaxOfReceipt(output);
         return output.toString();
+    }
+
+    private void buildHeaderOfReceipt(StringBuilder output) {
+        output.append("======Printing Orders======\n");
     }
 
     private void buildTotalPriceAndTaxOfReceipt(StringBuilder output) {
