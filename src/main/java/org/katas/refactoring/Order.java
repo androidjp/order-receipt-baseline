@@ -5,9 +5,9 @@ import java.util.List;
 public class Order {
     String nm;
     String addr;
-    List<LineItem> li;
+    List<OrderItem> li;
 
-    public Order(String nm, String addr, List<LineItem> li) {
+    public Order(String nm, String addr, List<OrderItem> li) {
         this.nm = nm;
         this.addr = addr;
         this.li = li;
@@ -21,7 +21,7 @@ public class Order {
         return addr;
     }
 
-    public List<LineItem> getLineItems() {
+    public List<OrderItem> getLineItems() {
         return li;
     }
 }

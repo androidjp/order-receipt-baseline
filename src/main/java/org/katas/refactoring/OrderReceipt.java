@@ -5,10 +5,10 @@ package org.katas.refactoring;
  * price and amount. It also calculates the sales tax @ 10% and prints as part
  * of order. It computes the total order amount (amount of individual lineItems +
  * total sales tax) and prints it.
- * 
+ *
  */
 public class OrderReceipt {
-    private Order order;
+	private Order order;
 
     public OrderReceipt(Order order) {
         this.order = order;
@@ -23,22 +23,15 @@ public class OrderReceipt {
 
 		double totSalesTx = 0d;
 		double tot = 0d;
-		for (LineItem lineItem : order.getLineItems()) {
-			output.append(lineItem.getDescription());
-			output.append('\t');
-			output.append(lineItem.getPrice());
-			output.append('\t');
-			output.append(lineItem.getQuantity());
-			output.append('\t');
-			output.append(lineItem.totalAmount());
-			output.append('\n');
+		for (OrderItem orderItem : order.getLineItems()) {
+			buildOrderItemInfoOfReceipt(output, orderItem);
 
 			// calculate sales tax @ rate of 10%
-            double salesTax = lineItem.totalAmount() * .10;
+            double salesTax = orderItem.totalAmount() * .10;
             totSalesTx += salesTax;
 
-            // calculate total amount of lineItem = price * quantity + 10 % sales tax
-            tot += lineItem.totalAmount() + salesTax;
+            // calculate total amount of orderItem = price * quantity + 10 % sales tax
+            tot += orderItem.totalAmount() + salesTax;
 		}
 
 		// prints the state tax
@@ -47,6 +40,17 @@ public class OrderReceipt {
         // print total amount
 		output.append("Total Amount").append('\t').append(tot);
 		return output.toString();
+	}
+
+	private void buildOrderItemInfoOfReceipt(StringBuilder output, OrderItem orderItem) {
+		output.append(orderItem.getDescription());
+		output.append('\t');
+		output.append(orderItem.getPrice());
+		output.append('\t');
+		output.append(orderItem.getQuantity());
+		output.append('\t');
+		output.append(orderItem.totalAmount());
+		output.append('\n');
 	}
 
 	private void buildOrderInfoOfReceipt(StringBuilder output) {
