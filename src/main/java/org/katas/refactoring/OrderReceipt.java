@@ -5,60 +5,66 @@ package org.katas.refactoring;
  * price and amount. It also calculates the sales tax @ 10% and prints as part
  * of order. It computes the total order amount (amount of individual lineItems +
  * total sales tax) and prints it.
- *
  */
 public class OrderReceipt {
-	private Order order;
+    private Order order;
 
     public OrderReceipt(Order order) {
         this.order = order;
-	}
+    }
 
-	public String printReceipt() {
-		StringBuilder output = new StringBuilder();
+    public String printReceipt() {
+        StringBuilder output = new StringBuilder();
 
-		output.append("======Printing Orders======\n");
+        output.append("======Printing Orders======\n");
 
-		buildOrderInfoOfReceipt(output);
+        buildCustomerInfoOfReceipt(output);
+        buildOrderItemListInfoOfReceipt(output);
 
-		double totSalesTx = 0d;
-		double tot = 0d;
-		for (OrderItem orderItem : order.getLineItems()) {
-			buildOrderItemInfoOfReceipt(output, orderItem);
+        double totalSalesTax;
+        double totalPrice = 0d;
 
-		}
+        totalSalesTax = calculateTotalSalesTax(0d);
+        totalPrice = calculateTotalPrice(totalSalesTax, totalPrice);
 
-        for (OrderItem orderItem : order.getLineItems()) {
+        output.append("Sales Tax").append('\t').append(totalSalesTax);
+        output.append("Total Amount").append('\t').append(totalPrice);
+
+
+        return output.toString();
+    }
+
+    private double calculateTotalPrice(double totalSalesTax, double totalPrice) {
+        for (OrderItem orderItem : order.getOrderItemList()) {
+            totalPrice += orderItem.totalAmount();
+        }
+        totalPrice += totalSalesTax;
+        return totalPrice;
+    }
+
+    private double calculateTotalSalesTax(double totalSalesTax) {
+        for (OrderItem orderItem : order.getOrderItemList()) {
             double salesTax = orderItem.totalAmount() * .10;
-            totSalesTx += salesTax;
+            totalSalesTax += salesTax;
         }
+        return totalSalesTax;
+    }
 
-        for (OrderItem orderItem : order.getLineItems()) {
-            tot += orderItem.totalAmount();
+    private void buildOrderItemListInfoOfReceipt(StringBuilder output) {
+        for (OrderItem orderItem : order.getOrderItemList()) {
+            output.append(orderItem.getDescription());
+            output.append('\t');
+            output.append(orderItem.getPrice());
+            output.append('\t');
+            output.append(orderItem.getQuantity());
+            output.append('\t');
+            output.append(orderItem.totalAmount());
+            output.append('\n');
         }
-        tot += totSalesTx;
+    }
 
-            // prints the state tax
-		output.append("Sales Tax").append('\t').append(totSalesTx);
-
-        // print total amount
-		output.append("Total Amount").append('\t').append(tot);
-		return output.toString();
-	}
-
-	private void buildOrderItemInfoOfReceipt(StringBuilder output, OrderItem orderItem) {
-		output.append(orderItem.getDescription());
-		output.append('\t');
-		output.append(orderItem.getPrice());
-		output.append('\t');
-		output.append(orderItem.getQuantity());
-		output.append('\t');
-		output.append(orderItem.totalAmount());
-		output.append('\n');
-	}
-
-	private void buildOrderInfoOfReceipt(StringBuilder output) {
-		output.append(order.getCustomerName());
-		output.append(order.getCustomerAddress());
-	}
+    private void buildCustomerInfoOfReceipt(StringBuilder output) {
+        output.append(order.getCustomerName());
+        output.append(order.getCustomerAddress());
+    }
 }
